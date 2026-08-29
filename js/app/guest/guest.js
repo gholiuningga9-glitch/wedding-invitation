@@ -162,10 +162,6 @@ export const guest = (() => {
         document.body.scrollIntoView({ behavior: 'instant' });
         document.getElementById('root').classList.remove('opacity-0');
 
-        if (theme.isAutoMode()) {
-            document.getElementById('button-theme').classList.remove('d-none');
-        }
-
         slide();
         theme.spyTop();
 

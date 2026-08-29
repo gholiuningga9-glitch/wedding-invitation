@@ -12,7 +12,9 @@ html {
 }
 
 .font-esthetic {
-    font-family: 'Sacramento', cursive !important;
+    font-family: 'Allura', cursive !important;
+    font-weight: 400;
+    letter-spacing: 0.015em;
 }
 
 .font-arabic {
@@ -46,35 +48,36 @@ html[data-bs-theme="light"] .btn-transparent {
 }
 
 html[data-bs-theme="light"] .color-theme-svg {
-    color: rgb(255, 255, 255);
-    background-color: var(--bs-light);
+    color: #f6f2e9;
+    background-color: #f6f2e9;
 }
 
 html[data-bs-theme="dark"] .color-theme-svg {
-    color: rgb(0, 0, 0);
-    background-color: var(--bs-dark);
+    color: #f6f2e9;
+    background-color: #f6f2e9;
 }
 
 html[data-bs-theme="light"] .bg-light-dark {
-    background-color: rgb(var(--bs-light-rgb));
+    background-color: #f6f2e9;
 }
 
 html[data-bs-theme="dark"] .bg-light-dark {
-    background-color: rgb(var(--bs-dark-rgb));
+    background-color: #f6f2e9;
 }
 
 html[data-bs-theme="light"] .bg-white-black {
-    background-color: rgb(var(--bs-white-rgb));
+    background-color: #fdfbf5;
 }
 
 html[data-bs-theme="dark"] .bg-white-black {
-    background-color: rgb(var(--bs-black-rgb));
+    background-color: #fdfbf5;
 }
 
 .bg-cover-home {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: saturate(0.72) sepia(0.08);
     mask-image: linear-gradient(0.5turn, transparent, black 40%, black 60%, transparent);
 }
 
@@ -112,4 +115,223 @@ svg {
 
 .no-gap-bottom {
     margin-bottom: -0.75rem !important;
+}
+
+/* Tema forget-me-not: biru bunga yang lembut, daun sage, dan kertas gading. */
+html[data-bs-theme="light"] {
+    --bs-primary: #637ca6;
+    --bs-primary-rgb: 99, 124, 166;
+    --bs-secondary: #8a9c86;
+    --bs-secondary-rgb: 138, 156, 134;
+    --bs-light: #f6f2e9;
+    --bs-light-rgb: 246, 242, 233;
+    --bs-dark: #344455;
+    --bs-dark-rgb: 52, 68, 85;
+    --bs-body-color: #46515d;
+    --bs-body-bg: #f6f2e9;
+    --bs-border-color: #d9d4c8;
+}
+
+body {
+    background-color: #f6f2e9;
+    background-image: radial-gradient(rgba(99, 124, 166, 0.09) 0.7px, transparent 0.7px);
+    background-size: 16px 16px;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+}
+
+h1, h2, h3 {
+    font-family: 'Italiana', serif;
+}
+
+.bg-theme-auto {
+    background-color: rgba(255, 253, 247, 0.82) !important;
+    border: 1px solid rgba(110, 130, 160, 0.15);
+    box-shadow: 0 10px 30px rgba(68, 81, 93, 0.08) !important;
+}
+
+.hero-photo,
+.img-center-crop {
+    border-color: #fdfbf5 !important;
+    box-shadow: 0 14px 32px rgba(52, 68, 85, 0.18) !important;
+}
+
+.btn-outline-auto {
+    --bs-btn-color: #526b94;
+    --bs-btn-border-color: #6d83a8;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #637ca6;
+    --bs-btn-hover-border-color: #637ca6;
+}
+
+.btn-primary {
+    --bs-btn-bg: #637ca6;
+    --bs-btn-border-color: #637ca6;
+    --bs-btn-hover-bg: #506b95;
+    --bs-btn-hover-border-color: #506b95;
+}
+
+.nav-link {
+    color: #74819a !important;
+}
+
+.nav-link.active,
+.nav-link:hover {
+    color: #526b94 !important;
+}
+
+.floral-spray {
+    position: absolute;
+    z-index: 1;
+    width: 8rem;
+    height: 15rem;
+    color: #6c82b5;
+    opacity: 0.82;
+    pointer-events: none;
+}
+
+.floral-spray::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 3.3rem;
+    width: 1px;
+    height: 13rem;
+    background: #7c9079;
+    transform: rotate(-17deg);
+    transform-origin: bottom;
+}
+
+.floral-spray span {
+    position: absolute;
+    color: #7389bc;
+    font-family: Georgia, serif;
+    font-size: 2.1rem;
+    line-height: 1;
+    text-shadow: 0 1px 0 #e9d77a, 0 4px 10px rgba(73, 90, 125, 0.18);
+}
+
+.floral-spray span:nth-child(1) { bottom: 3.3rem; left: 1rem; }
+.floral-spray span:nth-child(2) { bottom: 6.6rem; left: 4.1rem; font-size: 2.5rem; }
+.floral-spray span:nth-child(3) { bottom: 10.4rem; left: 1.3rem; font-size: 1.8rem; }
+.floral-spray span:nth-child(4) { bottom: 1.2rem; left: 4.8rem; color: #91a176; font-size: 1.4rem; }
+.floral-spray-left { bottom: -3rem; left: -2.9rem; transform: rotate(-11deg); }
+.floral-spray-right { right: -2.9rem; bottom: -3rem; transform: scaleX(-1) rotate(-11deg); }
+
+.floral-divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 4.5rem;
+    padding: 0.5rem 1.5rem;
+    overflow: hidden;
+    background-color: #f6f2e9;
+}
+
+.floral-divider::before,
+.floral-divider::after {
+    content: '';
+    width: min(24vw, 9rem);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #94a486 35%, #94a486 65%, transparent);
+}
+
+.floral-divider .flower-divider-petal {
+    position: relative;
+    color: #7288b8;
+    font-family: Georgia, serif;
+    font-size: 1.75rem;
+    line-height: 1;
+    text-shadow: 0 1px 0 #efd979, 0 3px 8px rgba(73, 90, 125, 0.18);
+}
+
+.floral-divider .flower-divider-petal:nth-child(2) {
+    margin-top: -0.8rem;
+    color: #637ca6;
+    font-size: 2.25rem;
+}
+
+.navbar .nav-link span {
+    font-family: 'Italiana', serif;
+}
+
+#home .position-relative.text-center {
+    min-height: 43rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+}
+
+#home h1 {
+    color: #526b94;
+    text-transform: uppercase;
+    font-family: 'Italiana', serif !important;
+    font-size: 1.15rem !important;
+    letter-spacing: 0.2em;
+}
+
+#home h2, #welcome h2 {
+    color: #465f8c;
+}
+
+section h2.font-esthetic {
+    color: #526b94;
+}
+
+/* Semua foto galeri memakai bingkai yang sama agar carousel atas dan bawah rapi di mobile. */
+#gallery .carousel-inner {
+    background-color: #e7e4dc;
+}
+
+#gallery .gallery-photo {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.love-story-slides {
+    background-color: #e7e4dc;
+}
+
+.story-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.love-story-copy {
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+.love-story-copy h3 {
+    color: #526b94;
+    font-size: 2.2rem;
+}
+
+.love-story-copy p {
+    margin-bottom: 1rem;
+}
+
+.love-story-dialogue {
+    color: #526b94;
+    font-style: italic;
+    padding-left: 0.75rem;
+    border-left: 2px solid #b8c6df;
+}
+
+.love-story-copy ~ .row {
+    display: none;
+}
+
+@media screen and (max-width: 400px) {
+    .floral-spray { transform: scale(0.82); }
+    .floral-spray-left { left: -3.4rem; }
+    .floral-spray-right { right: -3.4rem; }
 }
