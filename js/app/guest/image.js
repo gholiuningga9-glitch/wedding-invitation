@@ -126,12 +126,37 @@ export const image = (() => {
             return;
         }
 
+        const loadVisible = () => {
+            const visible = imgs.filter((el) => {
+                if (!el.isConnected || !el.getAttribute('data-src')) {
+                    return false;
+                }
+
+                const rect = el.getBoundingClientRect();
+                return rect.top < window.innerHeight + 240 && rect.bottom > -240 && rect.left < window.innerWidth + 240 && rect.right > -240;
+            });
+
+            visible.forEach((el) => {
+                if (!el.dataset.loaded) {
+                    el.dataset.loaded = 'true';
+                    getByFetch(el);
+                }
+            });
+        };
+
         imgs.forEach((el) => {
             el.loading = 'lazy';
+            if (el.getAttribute('data-src') && !el.dataset.loaded) {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight + 240 && rect.bottom > -240 && rect.left < window.innerWidth + 240 && rect.right > -240) {
+                    el.dataset.loaded = 'true';
+                    getByFetch(el);
+                }
+            }
         });
 
         if (typeof IntersectionObserver === 'undefined') {
-            imgs.slice(0, 4).forEach((el) => getByFetch(el));
+            loadVisible();
             return;
         }
 
@@ -144,7 +169,8 @@ export const image = (() => {
 
                 const el = entry.target;
                 observer.unobserve(el);
-                if (el.getAttribute('data-src')) {
+                if (el.getAttribute('data-src') && !el.dataset.loaded) {
+                    el.dataset.loaded = 'true';
                     getByFetch(el);
                 }
             });
