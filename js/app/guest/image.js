@@ -14,6 +14,11 @@ export const image = (() => {
     let c = null;
 
     /**
+     * @type {IntersectionObserver|null}
+     */
+    let lazyObserver = null;
+
+    /**
      * @type {object[]}
      */
     const urlCache = [];
@@ -33,6 +38,14 @@ export const image = (() => {
             el.closest('#welcome') ||
             el.id === 'show-modal-image'
         );
+    };
+
+    /**
+     * @param {HTMLImageElement} el
+     * @returns {boolean}
+     */
+    const shouldLazyLoad = (el) => {
+        return Boolean(el?.getAttribute('data-src') && !shouldTrackProgress(el));
     };
 
     /**
@@ -105,10 +118,50 @@ export const image = (() => {
     const hasDataSrc = () => Array.from(images).some((i) => i.hasAttribute('data-src'));
 
     /**
+     * @param {HTMLImageElement[]} imgs
+     * @returns {void}
+     */
+    const observeLazyImages = (imgs = []) => {
+        if (!imgs.length) {
+            return;
+        }
+
+        imgs.forEach((el) => {
+            el.loading = 'lazy';
+        });
+
+        if (typeof IntersectionObserver === 'undefined') {
+            imgs.slice(0, 4).forEach((el) => getByFetch(el));
+            return;
+        }
+
+        lazyObserver?.disconnect();
+        lazyObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+
+                const el = entry.target;
+                observer.unobserve(el);
+                if (el.getAttribute('data-src')) {
+                    getByFetch(el);
+                }
+            });
+        }, {
+            rootMargin: '200px 0px',
+            threshold: 0.05,
+        });
+
+        imgs.forEach((el) => lazyObserver.observe(el));
+    };
+
+    /**
      * @returns {Promise<void>}
      */
     const load = async () => {
-        const imgs = Array.from(images);
+        const imgs = Array.from(images || []);
+        const tracked = imgs.filter((el) => shouldTrackProgress(el));
 
         /**
          * @param {function} filter 
@@ -121,7 +174,12 @@ export const image = (() => {
         };
 
         await runGroup((el) => shouldTrackProgress(el));
-        await runGroup((el) => !shouldTrackProgress(el));
+
+        if (tracked.length === 0) {
+            observeLazyImages(imgs.filter((el) => shouldLazyLoad(el)));
+        } else {
+            observeLazyImages(imgs.filter((el) => shouldLazyLoad(el) && !tracked.includes(el)));
+        }
     };
 
     /**
@@ -141,6 +199,12 @@ export const image = (() => {
         Array.from(images)
             .filter((el) => shouldTrackProgress(el))
             .forEach(progress.add);
+
+        Array.from(images).forEach((el) => {
+            if (shouldLazyLoad(el)) {
+                el.loading = 'lazy';
+            }
+        });
 
         return {
             load,
