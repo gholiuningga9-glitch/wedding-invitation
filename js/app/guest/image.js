@@ -45,7 +45,14 @@ export const image = (() => {
      * @returns {boolean}
      */
     const shouldLazyLoad = (el) => {
-        return Boolean(el?.getAttribute('data-src') && !shouldTrackProgress(el));
+        if (!el?.getAttribute('data-src')) {
+            return false;
+        }
+
+        const src = el.getAttribute('src');
+        const dataSrc = el.getAttribute('data-src');
+
+        return Boolean(src !== dataSrc && !shouldTrackProgress(el));
     };
 
     /**
@@ -91,6 +98,10 @@ export const image = (() => {
         const src = el.getAttribute('data-src');
 
         if (!src) {
+            return;
+        }
+
+        if (el.getAttribute('src') === src) {
             return;
         }
 
