@@ -19,6 +19,23 @@ export const image = (() => {
     const urlCache = [];
 
     /**
+     * @param {HTMLImageElement} el
+     * @returns {boolean}
+     */
+    const shouldTrackProgress = (el) => {
+        if (!el) {
+            return false;
+        }
+
+        return Boolean(
+            el.hasAttribute('fetchpriority') ||
+            el.closest('#loading') ||
+            el.closest('#welcome') ||
+            el.id === 'show-modal-image'
+        );
+    };
+
+    /**
      * @param {string} src 
      * @returns {Promise<HTMLImageElement>}
      */
@@ -41,7 +58,7 @@ export const image = (() => {
         el.src = img.src;
         img.remove();
 
-        progress.complete('image');
+        progress.complete('image', false, shouldTrackProgress(el));
     });
 
     /**
@@ -49,12 +66,14 @@ export const image = (() => {
      * @returns {void}
      */
     const getByFetch = (el) => {
+        const track = shouldTrackProgress(el);
+
         urlCache.push({
             url: el.getAttribute('data-src'),
             res: (url) => appendImage(el, url),
             rej: (err) => {
                 console.error(err);
-                progress.invalid('image');
+                progress.invalid('image', track);
             },
         });
     };
@@ -64,17 +83,19 @@ export const image = (() => {
      * @returns {void}
      */
     const getByDefault = (el) => {
-        el.onerror = () => progress.invalid('image');
+        const track = shouldTrackProgress(el);
+
+        el.onerror = () => progress.invalid('image', track);
         el.onload = () => {
             el.width = el.naturalWidth;
             el.height = el.naturalHeight;
-            progress.complete('image');
+            progress.complete('image', false, track);
         };
 
         if (el.complete && el.naturalWidth !== 0 && el.naturalHeight !== 0) {
-            progress.complete('image');
+            progress.complete('image', false, track);
         } else if (el.complete) {
-            progress.invalid('image');
+            progress.invalid('image', track);
         }
     };
 
@@ -99,8 +120,8 @@ export const image = (() => {
             await c.run(urlCache, progress.getAbort());
         };
 
-        await runGroup((el) => el.hasAttribute('fetchpriority'));
-        await runGroup((el) => !el.hasAttribute('fetchpriority'));
+        await runGroup((el) => shouldTrackProgress(el));
+        await runGroup((el) => !shouldTrackProgress(el));
     };
 
     /**
@@ -117,7 +138,9 @@ export const image = (() => {
     const init = () => {
         c = cache('image').withForceCache();
         images = document.querySelectorAll('img');
-        images.forEach(progress.add);
+        Array.from(images)
+            .filter((el) => shouldTrackProgress(el))
+            .forEach(progress.add);
 
         return {
             load,

@@ -369,8 +369,8 @@ export const guest = (() => {
                 lib.load({ confetti: data.is_confetti_animation });
 
                 comment.show()
-                    .then(() => progress.complete('comment'))
-                    .catch(() => progress.invalid('comment'));
+                    .then(() => progress.complete('comment', false, false))
+                    .catch(() => progress.invalid('comment', false));
 
             }).catch(() => progress.invalid('config'));
         }
