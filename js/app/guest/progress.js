@@ -99,7 +99,11 @@ export const progress = (() => {
     const init = () => {
         info = document.getElementById('progress-info');
         bar = document.getElementById('progress-bar');
-        info.classList.remove('d-none');
+
+        if (info) {
+            info.classList.remove('d-none');
+        }
+
         cancelProgress = new Promise((res) => document.addEventListener('undangan.progress.invalid', res));
 
         if (fallbackTimer) {
@@ -128,4 +132,4 @@ export const progress = (() => {
         complete,
         getAbort,
     };
-});
+})();
