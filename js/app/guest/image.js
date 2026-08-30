@@ -72,6 +72,14 @@ export const image = (() => {
         img.remove();
 
         progress.complete('image', false, shouldTrackProgress(el));
+    }).catch((err) => {
+        const fallbackSrc = el.getAttribute('data-src') || el.src;
+        if (fallbackSrc && fallbackSrc !== el.src) {
+            el.src = fallbackSrc;
+            el.classList.remove('opacity-0');
+        }
+        console.error(err);
+        progress.invalid('image', shouldTrackProgress(el));
     });
 
     /**
@@ -80,12 +88,26 @@ export const image = (() => {
      */
     const getByFetch = (el) => {
         const track = shouldTrackProgress(el);
+        const src = el.getAttribute('data-src');
+
+        if (!src) {
+            return;
+        }
+
+        if (el.src !== src) {
+            el.src = src;
+            el.classList.remove('opacity-0');
+        }
 
         urlCache.push({
-            url: el.getAttribute('data-src'),
+            url: src,
             res: (url) => appendImage(el, url),
             rej: (err) => {
                 console.error(err);
+                if (el.src !== src) {
+                    el.src = src;
+                    el.classList.remove('opacity-0');
+                }
                 progress.invalid('image', track);
             },
         });
