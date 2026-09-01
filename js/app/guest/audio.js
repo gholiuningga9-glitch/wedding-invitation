@@ -30,6 +30,8 @@ export const audio = (() => {
             audioEl.muted = false;
             audioEl.autoplay = false;
             audioEl.controls = false;
+            audioEl.volume = 0.6;
+            audioEl.preload = 'auto';
 
             progress.complete('audio');
         } catch {
@@ -44,7 +46,7 @@ export const audio = (() => {
          * @returns {Promise<void>}
          */
         const play = async () => {
-            if (!navigator.onLine || !music) {
+            if (!navigator.onLine || !music || !audioEl) {
                 return;
             }
 
@@ -56,7 +58,8 @@ export const audio = (() => {
                 music.innerHTML = statePlay;
             } catch (err) {
                 isPlay = false;
-                util.notify(err).error();
+                music.disabled = false;
+                music.innerHTML = statePause;
             }
         };
 
@@ -73,7 +76,7 @@ export const audio = (() => {
             music.classList.remove('d-none');
 
             if (playOnOpen) {
-                play();
+                window.setTimeout(() => play(), 150);
             }
         });
 
