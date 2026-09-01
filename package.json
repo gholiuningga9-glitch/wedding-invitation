@@ -6,6 +6,7 @@
         "globals": "^16.4.0",
         "htmlhint": "^1.7.1",
         "madge": "^8.0.0",
+        "sharp": "^0.35.4",
         "stylelint": "^16.25.0",
         "stylelint-config-recommended": "^17.0.0"
     },
