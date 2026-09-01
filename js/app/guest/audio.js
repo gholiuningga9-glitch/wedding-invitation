@@ -40,6 +40,7 @@ export const audio = (() => {
         }
 
         let isPlay = false;
+        let shouldPlayOnOpen = false;
         const music = document.getElementById('button-music');
 
         /**
@@ -73,12 +74,25 @@ export const audio = (() => {
         };
 
         document.addEventListener('undangan.open', () => {
-            music.classList.remove('d-none');
+            if (!music) {
+                return;
+            }
 
-            if (playOnOpen) {
+            music.classList.remove('d-none');
+            shouldPlayOnOpen = true;
+
+            if (playOnOpen && audioEl) {
                 window.setTimeout(() => play(), 150);
             }
         });
+
+        if (playOnOpen && audioEl) {
+            window.setTimeout(() => {
+                if (shouldPlayOnOpen) {
+                    play();
+                }
+            }, 150);
+        }
 
         music.addEventListener('offline', pause);
         music.addEventListener('click', () => isPlay ? pause() : play());
